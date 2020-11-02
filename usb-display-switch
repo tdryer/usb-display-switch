@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+"""Turn on displays when a USB device is added, and off when removed."""
+
+import subprocess
+import sys
+
+import pyudev
+
+VENDOR_ID = 0x0BDA
+PRODUCT_ID = 0x5411
+
+PRODUCT_PREFIX = "{:x}/{:x}".format(VENDOR_ID, PRODUCT_ID)
+
+
+def main():
+    context = pyudev.Context()
+    monitor = pyudev.Monitor.from_netlink(context)
+    monitor.filter_by(subsystem="usb")
+
+    for device in iter(monitor.poll, None):
+        device_type = device.get("DEVTYPE")
+        product = device.get("PRODUCT")
+        if device_type == "usb_device" and product.startswith(PRODUCT_PREFIX):
+            if device.action == "add":
+                print("device added", file=sys.stderr)
+                set_standby("on")
+            elif device.action == "remove":
+                print("device removed", file=sys.stderr)
+                set_standby("off")
+
+
+def set_standby(status):
+    try:
+        subprocess.check_call(["xset", "dpms", "force", status])
+    except subprocess.CalledProcessError as e:
+        print("'xset' failed with status {}\n".format(e.returncode), file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()
