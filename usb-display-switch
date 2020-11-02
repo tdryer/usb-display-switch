@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Turn on displays when a USB device is added, and off when removed."""
+"""Enable or disable display standby when a USB device is added or removed."""
 
 import subprocess
 import sys
