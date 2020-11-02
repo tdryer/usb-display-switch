@@ -3,12 +3,12 @@
 This is a script to enable or disable display standby when a USB device is
 added or removed.
 
-If you have multiple computers a USB switch device (a hub with multiple inputs
-and a button to toggle between them), you can use this script to also switch
-your display inputs automatically. When you press the button, the switch device
-is removed from one system and added to another. If the removed system turns
-the display off, and the added system turns the display on, the display will
-switch to the active input.
+If you have multiple computers and a USB switch device (a hub with multiple
+inputs and a button to toggle between them), you can use this script to also
+switch your display inputs automatically. When you press its button, the switch
+device is removed from one system and added to another. If the removed system
+turns the display off, and the added system turns the display on, the display
+will switch to the active input.
 
 This solution is inspired by Haim Gelfenbeyn's [display-switch] software and
 [article], which rely on [DDC/CI] to change display inputs. This didn't work
