@@ -2,8 +2,8 @@
 
 """Enable or disable display standby when a USB device is added or removed."""
 
+import logging
 import subprocess
-import sys
 
 import pyudev
 
@@ -14,6 +14,7 @@ PRODUCT_PREFIX = "{:x}/{:x}".format(VENDOR_ID, PRODUCT_ID)
 
 
 def main():
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
     context = pyudev.Context()
     monitor = pyudev.Monitor.from_netlink(context)
     monitor.filter_by(subsystem="usb")
@@ -23,10 +24,10 @@ def main():
         product = device.get("PRODUCT")
         if device_type == "usb_device" and product.startswith(PRODUCT_PREFIX):
             if device.action == "add":
-                print("device added", file=sys.stderr)
+                logging.info("device added, enabling standby")
                 set_standby("on")
             elif device.action == "remove":
-                print("device removed", file=sys.stderr)
+                logging.info("device removed, disabling standby")
                 set_standby("off")
 
 
@@ -34,7 +35,7 @@ def set_standby(status):
     try:
         subprocess.check_call(["xset", "dpms", "force", status])
     except subprocess.CalledProcessError as e:
-        print("'xset' failed with status {}\n".format(e.returncode), file=sys.stderr)
+        logging.warning("'xset' failed with status %s", e.returncode)
 
 
 if __name__ == "__main__":
