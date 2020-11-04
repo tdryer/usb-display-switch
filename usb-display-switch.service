@@ -1,0 +1,9 @@
+[Unit]
+Description=usb-display-switch
+
+[Service]
+ExecStart=%h/.local/bin/usb-display-switch
+Restart=always
+
+[Install]
+WantedBy=default.target

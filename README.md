@@ -57,3 +57,11 @@ sudo apt install python3-pyudev
 
 2. On each system you want to switch between, ensure that `usb-display-switch`
    is always running.
+
+   To do this using the provided systemd service:
+
+   ```
+   cp usb-display-switch ~/.local/bin/
+   cp usb-display-switch.service ~/.config/systemd/user/
+   systemctl --user enable --now usb-display-switch
+   ```
