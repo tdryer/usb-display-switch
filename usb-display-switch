@@ -24,14 +24,14 @@ def main():
         product = device.get("PRODUCT")
         if device_type == "usb_device" and product.startswith(PRODUCT_PREFIX):
             if device.action == "add":
-                logging.info("device added, enabling standby")
-                set_standby("on")
+                logging.info("device added, setting display on")
+                set_display_status("on")
             elif device.action == "remove":
-                logging.info("device removed, disabling standby")
-                set_standby("off")
+                logging.info("device removed, setting display off")
+                set_display_status("off")
 
 
-def set_standby(status):
+def set_display_status(status):
     try:
         subprocess.check_call(["xset", "dpms", "force", status])
     except subprocess.CalledProcessError as e:
